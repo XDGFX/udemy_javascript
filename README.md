@@ -157,3 +157,23 @@ In practice, this means that function declarations can happen anywhere within
 the block, and you can still use it anywhere. Function expressions or variables declared with
 `let/const` can only be used after they have been declared. Avoid using `var` in
 all other cases 😉.
+
+# `this`
+
+The `this` keyword is similar to the `self` keyword in Python, but actually has
+a much larger scope. The `this` keyword is a special variable which points to
+the 'owner' of the function in which the keyword is used.
+
+`this` is not static; it depends on how the function is called, and the value is
+only assigned when the function is called.
+
+There are four different ways to call a function:
+
+- **Method call**: `myObject.myFunction()`, `this` points to `myObject`
+- **Function call**: `myFunction()`, `this` is undefined (in strict mode)
+- **Arrow function call**: `myFunction()`, `this` is the surrounding function
+  (lexical `this`)
+- **Event listener**: `myElement.addEventListener()`, `this` is the DOM element
+  that the event listener is attached to
+
+`this` never points to the function itself, or the variable environment of the function.
