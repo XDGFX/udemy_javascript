@@ -135,3 +135,25 @@ myFunction();
 console.log(myVariable); // Goodbye
 ```
 
+# Hoisting
+
+Hoisting is a JavaScript feature that allows variables to be accessible/usable
+before they are actually declared.
+
+This can be interpreted as moving the declaration of a variable to the top of
+the current scope, and then assigning the variable to a placeholder value, until
+the variable is actually declared.
+
+### Hoisting Table
+
+|                                   | Hoisted? |              Initial Value               |         Scope          |
+| :-------------------------------: | :------: | :--------------------------------------: | :--------------------: |
+|      `function` declarations      |  ✅ Yes  |             Actual function              | Block (in strict mode) |
+|          `var` variables          |  ✅ Yes  |               `undefined`                |        Function        |
+|    `let` and `const` variables    |  🚫 No   |            `<uninitialised>`             |         Block          |
+| `function` expressions and arrows |          | Depends on if using `var` or `let/const` |                        |
+
+In practice, this means that function declarations can happen anywhere within
+the block, and you can still use it anywhere. Function expressions or variables declared with
+`let/const` can only be used after they have been declared. Avoid using `var` in
+all other cases 😉.
