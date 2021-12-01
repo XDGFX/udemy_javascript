@@ -284,3 +284,68 @@ The most promising option at the moment is the `structuredClone` global
 function, which at the time of writing is only supported in Node.js >=17 and
 Firefox 94, however it will hopefully be supported on other browsers in the
 future.
+
+# REST operator
+
+For clarity, the REST operator is the opposite of the spread operator. The
+spread operator (`...`) is used to spread out an array into individual values,
+as shown below:
+
+```javascript
+const myArray = [4, 5, 6];
+const mySecondArray = [1, 2, 3, ...myArray];
+
+console.log(mySecondArray); // [1, 2, 3, 4, 5, 6]
+```
+
+The REST operator does the opposite, by combining multiple values into an array.
+It uses the same `...` syntax as the spread operator, but can be differentiated
+as it's always on the left side of an `=`, whereas the spread operator is always
+on the right side.
+
+```javascript
+function myFunction(arg1, arg2, ...rest) {
+  console.log(arg1); // 1
+  console.log(arg2); // 2
+  console.log(rest); // [3, 4, 5, 6]
+}
+
+myFunction(1, 2, 3, 4, 5, 6);
+```
+
+It can work in a similar way to `*args` in Python.
+
+# Function `kwargs`
+
+I felt as though this was worth mentioning due to it's close connection to
+multiple args as discussed in the previous section. In Python, you can pass
+keyword arguments into a function in any order, as shown:
+
+```python
+def my_function(a, b, c):
+  print(a, b, c)
+
+my_function(b=2, a=1, c=3)  # 1 2 3
+```
+
+This is possible in ES6, but it's a little more complicated. The function must
+take an array as the input, and when calling the function, you must pass in an
+array as the input.
+
+```javascript
+function myFunction({ a, b, c }) {
+  console.log(a, b, c);
+}
+
+myFunction({ b: 2, a: 1, c: 3 }); // 1 2 3
+```
+
+As in Python, these can be substituted with default values if desired.
+
+```javascript
+function myFunction({ a = null, b = null, c = null }) {
+  console.log(a, b, c);
+}
+
+myFunction({ b: 2 }); // null 2 null
+```
