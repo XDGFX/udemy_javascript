@@ -177,3 +177,30 @@ There are four different ways to call a function:
   that the event listener is attached to
 
 `this` never points to the function itself, or the variable environment of the function.
+
+# `arguments`
+
+The `arguments` keyword is another special keyword used in JavaScript. It can be
+used inside a function to get all arguments passed to the function.
+
+```javascript
+function myFunction(a, b, c) {
+  console.log(arguments);
+}
+
+myFunction(1, 2, 3); // [1, 2, 3]
+```
+
+It can be used to access more parameters than specified in the function
+declaration. However, there is a more modern way of doing this, which is
+described later.
+
+```javascript
+function myFunction(a, b, c) {
+  console.log(arguments);
+}
+
+myFunction(1, 2, 3, 4); // [1, 2, 3, 4]
+```
+
+Arrow functions do not get this keyword.
