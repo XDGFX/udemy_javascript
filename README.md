@@ -22,8 +22,8 @@ function myFunction() {
 
 ### 2. Function expression
 
-As functions are technically a special type of variable, the function object
-can be created and then assigned to a variable name.
+As functions are technically a special type of variable, the function object can
+be created and then assigned to a variable name.
 
 ```javascript
 const myFunction = function () {
@@ -35,8 +35,8 @@ const myFunction = function () {
 
 ### 3. Arrow functions
 
-This works the same as function expressions, but is a shorter way of
-writing functions.
+This works the same as function expressions, but is a shorter way of writing
+functions.
 
 ```javascript
 const myFunction = () => {
@@ -101,7 +101,8 @@ function myFunction() {
 }
 ```
 
-Block scope is where JavaScript differs from Python; where variables are scoped within curly braces such as those used in `if` statements.
+Block scope is where JavaScript differs from Python; where variables are scoped
+within curly braces such as those used in `if` statements.
 
 ```javascript
 if (true) {
@@ -154,9 +155,9 @@ the variable is actually declared.
 | `function` expressions and arrows |          | Depends on if using `var` or `let/const` |                        |
 
 In practice, this means that function declarations can happen anywhere within
-the block, and you can still use it anywhere. Function expressions or variables declared with
-`let/const` can only be used after they have been declared. Avoid using `var` in
-all other cases 😉.
+the block, and you can still use it anywhere. Function expressions or variables
+declared with `let/const` can only be used after they have been declared. Avoid
+using `var` in all other cases 😉.
 
 # `this`
 
@@ -176,7 +177,8 @@ There are four different ways to call a function:
 - **Event listener**: `myElement.addEventListener()`, `this` is the DOM element
   that the event listener is attached to
 
-`this` never points to the function itself, or the variable environment of the function.
+`this` never points to the function itself, or the variable environment of the
+function.
 
 # `arguments`
 
@@ -204,3 +206,81 @@ myFunction(1, 2, 3, 4); // [1, 2, 3, 4]
 ```
 
 Arrow functions do not get this keyword.
+
+# Mutable vs immutable variables
+
+Similarly to Python, JavaScript has mutable (objects) and immutable (primitives)
+variables.
+
+This is to do with the way that the variable is stored in memory, and whether or
+not it can be changed.
+
+In practice, this can cause confusion when copying one variable to another, as
+immutable variables will function as two separate variables, whereas mutable
+variables will act as one variable with two different labels.
+
+```javascript
+// Immutable variables
+let age = 30;
+let oldAge = age;
+age = 31;
+
+console.log(age); // 31
+console.log(oldAge); // 30
+
+// Mutable variables
+const me = {
+  name: "John",
+  age: 30,
+};
+const friend = me;
+friend.age = 27;
+
+console.log(me.age); // 27
+console.log(friend.age); // 27
+```
+
+> 🚧 Behind the scenes, this is because primitives (numbers, strings, booleans)
+> are stored entirely in the call stack, whereas objects (arrays, objects) are
+> stored in the heap, with only a reference to the object stored in the call
+> stack.
+
+> ❗ This is also why we can change values within an object, even though it is
+> assigned with the `const` keyword. `const` != immutable.
+
+### Shallow copy
+
+If we really want to copy an object, we could use the `Object.assign()` method.
+This merges two objects, and returns a new object with the properties of both
+objects.
+
+```javascript
+const me = {
+  name: "John",
+  age: 30,
+};
+
+// Option 1
+const friend = Object.assign({}, me);
+friend.age = 27;
+
+// Option 2 (all in one)
+const friend = Object.assign(me, {
+  age: 27,
+});
+```
+
+> ⚠️ This is not a deep copy, meaning that the properties of the object will be
+> copied, but not the properties of the properties. This means that if the
+> properties of the object have objects, they will be copied as references, and
+> we run into the same issue as before!
+
+### Deep copy
+
+There are several ways to achieve this, but they are mostly experimental, only
+supported in some browsers, slow, or potentially dangerous!
+
+The most promising option at the moment is the `structuredClone` global
+function, which at the time of writing is only supported in Node.js >=17 and
+Firefox 94, however it will hopefully be supported on other browsers in the
+future.
