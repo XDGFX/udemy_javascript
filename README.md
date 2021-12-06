@@ -378,7 +378,8 @@ a = 0;
 a = a || 1; // 1
 ```
 
-This can be fixed using the 'nullish coalescing' operator.
+This can be fixed using the 'nullish coalescing' operator. It only looks for
+nullish values (`null` and `undefined`), as opposed to 'falsey' values.
 
 ```javascript
 a = 0;
@@ -388,8 +389,8 @@ a = undefined;
 a = a ?? 1; // 1
 ```
 
-This can also be used when accessing properties of an object. Sometimes a
-sub-property will not be available, and will return `undefined`.
+A similar operator can also be used when accessing properties of an object.
+Sometimes a sub-property will not be available, and will return `undefined`.
 
 ```javascript
 const obj = {
