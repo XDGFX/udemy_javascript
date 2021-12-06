@@ -349,3 +349,87 @@ function myFunction({ a = null, b = null, c = null }) {
 
 myFunction({ b: 2 }); // null 2 null
 ```
+
+# Nullish coalescing operator
+
+There are operators which can be used to 'short circuit' a value, similar to
+Python.
+
+```javascript
+// Old way
+if (a === undefined) {
+  a = 1;
+}
+
+// New way
+a = a || 1;
+```
+
+This is similar to `or` in Python.
+
+```python
+a = a or 1
+```
+
+However, there is an issue with this, as it will not work with 'falsey' values.
+
+```javascript
+a = 0;
+a = a || 1; // 1
+```
+
+This can be fixed using the 'nullish coalescing' operator.
+
+```javascript
+a = 0;
+a = a ?? 1; // 0
+
+a = undefined;
+a = a ?? 1; // 1
+```
+
+This can also be used when accessing properties of an object. Sometimes a
+sub-property will not be available, and will return `undefined`.
+
+```javascript
+const obj = {
+  a: 1,
+  b: 2,
+};
+
+console.log(obj.a); // 1
+console.log(obj.b); // 2
+console.log(obj.c); // undefined
+```
+
+This is fine, but accessing sub-properties of that object can require additional
+code to check for undefined.
+
+```javascript
+const obj = {
+  a: {
+    x: 1,
+  },
+  b: {
+    y: 2,
+  },
+};
+
+console.log(obj.a.x); // 1
+console.log(obj.b.y); // 2
+console.log(obj.c.z); // error
+
+// Old solution
+if (obj.a) {
+  console.log(obj.a.x); // 1
+}
+// etc...
+
+// New solution
+console.log(obj.a?.x); // 1
+console.log(obj.b?.y); // 2
+console.log(obj.c?.z); // undefined
+```
+
+The operator 'short circuits' the execution, and as soon as `obj.c` does not
+exist, it returns `undefined` without executing the rest of the code.
