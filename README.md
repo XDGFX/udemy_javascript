@@ -459,3 +459,43 @@ arr[arr.length - 1];
 arr.slice(-1)[0];
 arr.at(-1);
 ```
+
+# `map`, `filter`, and `reduce`
+
+### `map`
+
+Transform one array into a new array, performing a function on each of the
+elements.
+
+```javascript
+const pricesEUR = [23, 11, 64];
+
+const pricesUSD = pricesEUR.map(function (price) {
+  return price * 1.1;
+});
+
+// Note, this can also be shortened to:
+const pricesUSD = pricesEUR.map((price) => price * 1.1);
+```
+
+If we want the index, or the whole original array, they can be passed as
+additional arugments
+
+```javascript
+const pricesUSD = pricesEUR.map(function (price, index, prices) {
+  return price * 1.1;
+});
+```
+
+We can use a combination of `map` and `filter` to emulate Python's list
+comprehension
+
+```python
+pricesEUR = [23, 11, 64];
+pricesUSD = [x * 1.1 for x in pricesEUR if x > 20]
+```
+
+```javascript
+const pricesEUR = [23, 11, 64];
+pricesUSD = pricesEUR.filter((price) => price > 20).map((price) => price * 1.1);
+```
