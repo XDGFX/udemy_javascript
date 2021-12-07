@@ -504,6 +504,40 @@ const pricesUSD = pricesEUR.map(function (price, index, prices) {
 });
 ```
 
+### `filter`
+
+This works in a similar way to `map`, but returns a boolean to specify if the
+value should or should not be included in the new array.
+
+```javascript
+const pricesEUR = [23, 11, 64];
+const highPrices = pricesEUR.filter((price) => price > 50);
+```
+
+### `reduce`
+
+This method is used to combine all elements of an array into a single value,
+through some function.
+
+```javascript
+// Find the sum of all prices
+const pricesEUR = [23, 11, 64];
+const sum = pricesEUR.reduce(function (total, price) {
+  return total + price;
+}, 0);
+
+// Alternative arrow function
+const sum = pricesEUR.reduce((total, price) => total + price, 0);
+```
+
+The first argument is the accumulator, and the second argument is the current
+array element. The `0` is the initial value of the accumulator.
+
+Third and fourth arguments are the index and the original array,
+like in the other array methods.
+
+### Chaining methods
+
 We can use a combination of `map` and `filter` to emulate Python's list
 comprehension
 
@@ -514,5 +548,20 @@ pricesUSD = [x * 1.1 for x in pricesEUR if x > 20]
 
 ```javascript
 const pricesEUR = [23, 11, 64];
-pricesUSD = pricesEUR.filter((price) => price > 20).map((price) => price * 1.1);
+const pricesUSD = pricesEUR
+  .filter((price) => price > 20)
+  .map((price) => price * 1.1);
+```
+
+Alternatively in longer form:
+
+```javascript
+const pricesEUR = [23, 11, 64];
+const pricesUSD = pricesEUR
+  .filter(function (price) {
+    return price > 20;
+  })
+  .map(function (price) {
+    return price * 1.1;
+  });
 ```
