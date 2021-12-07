@@ -315,6 +315,23 @@ myFunction(1, 2, 3, 4, 5, 6);
 
 It can work in a similar way to `*args` in Python.
 
+# Ternary operator
+
+This operator is a shortand `if`, `else` statement. It's used to returned either
+one or another variable depending on a condition.
+
+```javascript
+const myVariable = true;
+console.log(myVariable ? "The condition is true" : "The condition is false");
+```
+
+This is similar to the Python statement:
+
+```python
+my_variable = True
+print("The condition is true" if my_variable else "The condition is false")
+```
+
 # Function `kwargs`
 
 I felt as though this was worth mentioning due to it's close connection to
