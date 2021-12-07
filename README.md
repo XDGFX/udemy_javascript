@@ -434,3 +434,28 @@ console.log(obj.c?.z); // undefined
 
 The operator 'short circuits' the execution, and as soon as `obj.c` does not
 exist, it returns `undefined` without executing the rest of the code.
+
+# Array `at` method
+
+Instead of using square bracket notation to select elements from a list, the new
+`at` method can be used to select elements by their index instead.
+
+```javascript
+arr = [23, 11, 64];
+
+// Old method
+arr[0]; // 23
+
+// New method
+arr.at(0);
+```
+
+The main benefit can be seen when selecting items from the end of an array,
+which is not possible using the square bracket notation.
+
+```javascript
+// Get last element
+arr[arr.length - 1];
+arr.slice(-1)[0];
+arr.at(-1);
+```
