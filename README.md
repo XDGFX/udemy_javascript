@@ -565,3 +565,326 @@ const pricesUSD = pricesEUR
     return price * 1.1;
   });
 ```
+
+# OOP
+
+OOP is slightly different in JavaScript when compared to other languages such as
+Python. There is no such thing as a traditional class, instead there is
+prototypal inheritance.
+
+### Different ways to create objects
+
+1. Constructor function
+
+   This is the traditional way to create objects in JavaScript. It is a function
+   which is called with the `new` keyword, and returns an object.
+
+   ```javascript
+   function Person(name) {
+     this.name = name;
+   }
+
+   const person = new Person("John");
+   ```
+
+   The `this` keyword is used to refer to the object being created.
+
+2. ES6 class syntax
+
+   This is a new way to create objects in JavaScript. It is a syntactical
+   shorthand for creating a constructor function.
+
+   ```javascript
+   class Person {
+     constructor(name) {
+       this.name = name;
+     }
+   }
+
+   const person = new Person("John");
+   ```
+
+3. Object.create()
+
+   Behind the scenes this still uses prototypal inheritance, but there is no
+   `new` keyword, and no automatic inheritance.
+
+   ```javascript
+   // Create the prototype separately
+   const PersonPrototype = {
+     calcAge() {
+       console.log(2037 - this.birthYear);
+     },
+   };
+
+   // Create the object
+   const steven = Object.create(PersonPrototype);
+   ```
+
+### Methods
+
+It is possible to create methods directly on the object, however this is bad
+practice as it means any instance of the object will copy the method, resulting
+in lots of duplicate methods, which is very inefficient.
+
+```javascript
+function Person(name, birthYear) {
+  this.name = name;
+  this.birthYear = birthYear;
+
+  // Never do this!
+  this.calculateAge = function () {
+    return 2037 - this.birthYear;
+  };
+}
+```
+
+Instead, every object instance has a 'prototype' which the object has inherited
+from. For example, standard Array objects have a prototype which includes
+methods such as `map` and `filter`.
+
+```javascript
+const arr = [1, 2, 3];
+
+arr.map(function (x) {
+  return x * 2;
+});
+
+console.log(Array.prototype); // { map: [Function: map], filter: [Function: filter] ... }
+```
+
+We can use the `prototype` to add methods to our object instances.
+
+```javascript
+function Person(name, birthYear) {
+  this.name = name;
+  this.birthYear = birthYear;
+}
+
+Person.prototype.calculateAge = function () {
+  return 2037 - this.birthYear;
+};
+```
+
+Any object always has access to methods and properties from its prototype.
+
+> Note: The `prototype` property is _not_ the prototype of the object itself,
+> but the prototype of any object created from it. The naming is kind of
+> confusing, as the actual prototype of an object instance is stored in
+> `__proto__`.
+>
+> ```javascript
+> const john = new Person("John", 1990);
+>
+> john.__proto__ === Person.prototype; // true
+> ```
+
+### getters and setters
+
+These are special methods which act kind fo like properties in an object.
+
+- `get`: Gets the value of a property
+- `set`: Sets the value of a property
+
+```javascript
+const person = {
+  name: "John",
+  birthYear: 1997,
+  get age() {
+    return 2037 - this.birthYear;
+  },
+  set age(value) {
+    this.birthYear = 2037 - value;
+  },
+};
+
+console.log(person.age); // 21
+person.age = 30;
+console.log(person.age); // 30
+```
+
+Setters and getters will conflict with property assignment elsewhere in the
+class, such as in the constructor function.
+
+```javascript
+class Person {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  set fullName(value) {
+    // Validate that the name contains a space
+    if (name.includes(" ")) {
+      this.fullName = value;
+    } else {
+      throw new Error(`$(value) is not a valid name`);
+    }
+  }
+}
+```
+
+This code will cause errors, as the `this.fullName` line inside the setter
+will call itself, leading to a call stack overflow.
+
+Instead, it is required to rename the internal variable to avoid this.
+Convention is to add an underscore to the start of the variable:
+
+```javascript
+class Person {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  set fullName(value) {
+    // Validate that the name contains a space
+    if (name.includes(" ")) {
+      this._fullName = value;
+    } else {
+      throw new Error(`$(value) is not a valid name`);
+    }
+  }
+
+  get fullName() {
+    return this._fullName;
+  }
+}
+```
+
+> Node that a getter has been added to expose the new `_fullName` variable using
+> the `fullName` property.
+
+### Static and instance methods
+
+- `static`: Methods which are called on the class, rather than an instance
+- `instance`: Methods which are called on an instance
+
+```javascript
+class Person {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  // Only available on the class, not on instances
+  static greet() {
+    console.log("Hello!");
+  }
+
+  // Part of the prototype chain, will be inherited by all instances
+  greet() {
+    console.log("Hello, I'm " + this.fullName);
+  }
+}
+
+john = new Person("John", 1990);
+
+john.greet(); // Hello, I'm John
+Person.greet(); // Hello!
+```
+
+### Inheritance between classes
+
+OP is often used to create multiple chains of inheritance, where child classes
+extend on parent classes with more specific methods.
+
+For example, a `Student` class could extend the `Person` class, and add
+additional methods such as `universityName` and `course`, while retaining
+`Person` methods such as `calcAge`.
+
+```javascript
+class Person {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  calcAge() {
+    return 2037 - this.birthYear;
+  }
+}
+
+class Student extends Person {
+  constructor(fullName, birthYear, universityName, course) {
+    super(fullName, birthYear);
+    this.universityName = universityName;
+    this.course = course;
+  }
+}
+```
+
+Like in Python, if the subclass does not need a constructor function, the parent
+class constructor will be called automatically.
+
+```javascript
+class Person {
+  constructor(fullName, birthYear) {
+    this.fullName = fullName;
+    this.birthYear = birthYear;
+  }
+
+  calcAge() {
+    return 2037 - this.birthYear;
+  }
+}
+
+class Student extends Person {
+  calcEducationLevel() {
+    const age = this.calcAge();
+
+    if (age < 12) {
+      return "Primary School";
+    } else if (age < 18) {
+      return "Secondary School";
+    } else {
+      return "University";
+    }
+  }
+}
+
+const john = new Student("John", 1990);
+
+console.log(john.calcEducationLevel()); // University
+```
+
+### Data encapsulation and privacy
+
+Frequently we want to hide methods or properties of classes from the user. In
+Python, this can be done by appending an underscore to the start of the name.
+
+In JavaScript, there is no official implementation of private methods or
+properties (yet), however the convention follows the same pattern as Python.
+
+```javascript
+class Account {
+  constructor(owner, currency) {
+    // Public properties
+    this.owner = owner;
+    this.currency = currency;
+
+    // Protected properties
+    this._balance = 0;
+    this._transactions = [];
+  }
+
+  // Protected method
+  _validateWithdrawal(amount) {
+    if (amount > this._balance) {
+      throw new Error("Insufficient funds");
+    }
+  }
+
+  // Public method
+  deposit(amount) {
+    this._balance += amount;
+    this._transactions.push(amount);
+  }
+
+  withdraw(amount) {
+    this._validateWithdrawal(amount);
+    this._balance -= amount;
+    this._transactions.push(-amount);
+  }
+}
+```
